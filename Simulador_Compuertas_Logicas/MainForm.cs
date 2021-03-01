@@ -15,65 +15,6 @@ namespace Simulador_Compuertas_Logicas
         public MainForm()
         {
             InitializeComponent();
-
-            //Form mainForm = new Form();
-            //mainForm.WindowState = FormWindowState.Maximized;
-
-            //this.WindowState = FormWindowState.Maximized;
-
-            this.Controls.OfType<Control>().Where(ctr => ctr is PictureBox).ToList().ForEach(ctr =>
-            {
-                ctr.MouseDown += Ctr_MouseDown;
-                ctr.MouseUp += Ctr_MouseUp;
-                ctr.MouseMove += Ctr_MouseMove;
-            });
-        }
-
-        //mouse_down, mouse_up, mouse_move
-        bool down = false;
-        Point inicial;
-
-        private void Ctr_MouseMove(object sender, MouseEventArgs e)
-        {
-            Control ctr = (Control)sender;
-
-            if (down)
-            {
-                ctr.Left = e.X + ctr.Left - inicial.X;
-                ctr.Top = e.Y + ctr.Top - inicial.Y;
-            }
-        }
-
-        private void Ctr_MouseUp(object sender, MouseEventArgs e) 
-        {
-            down = false;
-            
-            Control ctr = (Control)sender;
-
-            if ((ctr.Left >= 100 && ctr.Left <= 206) && (ctr.Top >= 203 && ctr.Top <= 353))//Primera Casilla
-            {
-                ctr.Location = new Point(111, 223);
-                Compuerta1Label.Text = ctr.Name;
-            }
-            else if ((ctr.Left >= 337 && ctr.Left <= 443) && (ctr.Top >= 203 && ctr.Top <= 353))//Primera Casilla
-            {
-                ctr.Location = new Point(349, 223);
-                Compuerta2Label.Text = ctr.Name;
-            }
-            else if ((ctr.Left >= 570 && ctr.Left <= 676) && (ctr.Top >= 203 && ctr.Top <= 353))
-            {
-                ctr.Location = new Point(583, 222);
-                Compuerta3Label.Text = ctr.Name;
-            }
-        }
-
-        private void Ctr_MouseDown(object sender, MouseEventArgs e)
-        {
-            if(e.Button == MouseButtons.Left)
-            {
-                down = true;
-                inicial = e.Location;
-            }
         }
 
         private void MainForm_Load(object sender, EventArgs e)
@@ -81,197 +22,165 @@ namespace Simulador_Compuertas_Logicas
 
         }
 
+        public void Calcular(NumericUpDown Valor1, NumericUpDown Valor2, NumericUpDown Resultado, ComboBox Combo)
+        {
+            Valor1.Enabled = false;
+            Valor2.Enabled = false;
+
+            if (C1F1ComboBox.Text == "AND")
+            {
+                if (Valor1.Value == 1 && Valor2.Value == 1)
+                    Resultado.Value = 1;
+                else
+                    Resultado.Value = 0;
+
+                Resultado.Enabled = false;
+            }
+            else if (Combo.Text == "OR")
+            {
+                if (Valor1.Value == 0 && Valor2.Value == 0)
+                    Resultado.Value = 0;
+                else
+                    Resultado.Value = 1;
+
+                Resultado.Enabled = false;
+            }
+            else if (Combo.Text == "NAND")
+            {
+                if (Valor1.Value == 1 && Valor2.Value == 1)
+                    Resultado.Value = 0;
+                else
+                    Resultado.Value = 1;
+
+                Resultado.Enabled = false;
+            }
+            else if (Combo.Text == "XOR")
+            {
+                if (Valor1.Value == Valor2.Value)
+                    Resultado.Value = 0;
+                else
+                    Resultado.Value = 1;
+
+                Resultado.Enabled = false;
+            }
+            else if (Combo.Text == "NOR")
+            {
+                if (Valor1.Value == 0 && Valor2.Value == 0)
+                    Resultado.Value = 1;
+                else
+                    Resultado.Value = 0;
+
+                Resultado.Enabled = false;
+            }
+            else if (Combo.Text == "NOT")
+            {
+                if (Valor1.Value == 0)
+                    Resultado.Value = 1;
+                else
+                    Resultado.Value = 0;
+
+                Resultado.Enabled = false;
+            }
+        }
+
         private void Confirmar1Button_Click(object sender, EventArgs e)
         {
-            C1V1NumericUpDown.Enabled = false;
-            C1V2NumericUpDown.Enabled = false;
-
-            if (Compuerta1Label.Text == "AND")
-            {
-                if (C1V1NumericUpDown.Value == 1 && C1V2NumericUpDown.Value == 1)
-                    C2V1NumericUpDown.Value = 1;
-                else
-                    C2V1NumericUpDown.Value = 0;
-
-                C2V1NumericUpDown.Enabled = false;
-            }
-            else if (Compuerta1Label.Text == "OR")
-            {
-                if (C1V1NumericUpDown.Value == 0 && C1V2NumericUpDown.Value == 0)
-                    C2V1NumericUpDown.Value = 0;
-                else
-                    C2V1NumericUpDown.Value = 1;
-
-                C2V1NumericUpDown.Enabled = false;
-            }
-            else if (Compuerta1Label.Text == "NAND")
-            {
-                if (C1V1NumericUpDown.Value == 1 && C1V2NumericUpDown.Value == 1)
-                    C2V1NumericUpDown.Value = 0;
-                else
-                    C2V1NumericUpDown.Value = 1;
-
-                C2V1NumericUpDown.Enabled = false;
-            }
-            else if (Compuerta1Label.Text == "XOR")
-            {
-                if (C1V1NumericUpDown.Value == C1V2NumericUpDown.Value)
-                    C2V1NumericUpDown.Value = 0;
-                else
-                    C2V1NumericUpDown.Value = 1;
-
-                C2V1NumericUpDown.Enabled = false;
-            }
-            else if (Compuerta1Label.Text == "NOR")
-            {
-                if (C1V1NumericUpDown.Value == 0 && C1V2NumericUpDown.Value == 0)
-                    C2V1NumericUpDown.Value = 1;
-                else
-                    C2V1NumericUpDown.Value = 0;
-
-                C2V1NumericUpDown.Enabled = false;
-            }
-            else if (Compuerta1Label.Text == "NOT")
-            {
-                if (C1V1NumericUpDown.Value == 0)
-                    C2V1NumericUpDown.Value = 1;
-                else
-                    C2V1NumericUpDown.Value = 0;
-
-                C2V1NumericUpDown.Enabled = false;
-            }
+            Calcular(C1V1NumericUpDown, C1V2NumericUpDown, C2V1NumericUpDown, C1F1ComboBox);
         }
 
         private void Confirmar2Button_Click(object sender, EventArgs e)
         {
-            C2V1NumericUpDown.Enabled = false;
-            C2V2NumericUpDown.Enabled = false;
-
-            if (Compuerta2Label.Text == "AND")
-            {
-                if (C2V1NumericUpDown.Value == 1 && C2V2NumericUpDown.Value == 1)
-                    C3V1NumericUpDown.Value = 1;
-                else
-                    C3V1NumericUpDown.Value = 0;
-
-                C3V1NumericUpDown.Enabled = false;
-            }
-            else if (Compuerta2Label.Text == "OR")
-            {
-                if (C2V1NumericUpDown.Value == 0 && C2V2NumericUpDown.Value == 0)
-                    C3V1NumericUpDown.Value = 0;
-                else
-                    C3V1NumericUpDown.Value = 1;
-
-                C3V1NumericUpDown.Enabled = false;
-            }
-            else if (Compuerta2Label.Text == "NAND")
-            {
-                if (C2V1NumericUpDown.Value == 1 && C2V2NumericUpDown.Value == 1)
-                    C3V1NumericUpDown.Value = 0;
-                else
-                    C3V1NumericUpDown.Value = 1;
-
-                C3V1NumericUpDown.Enabled = false;
-            }
-            else if (Compuerta2Label.Text == "XOR")
-            {
-                if (C2V1NumericUpDown.Value == C2V2NumericUpDown.Value)
-                    C3V1NumericUpDown.Value = 0;
-                else
-                    C3V1NumericUpDown.Value = 1;
-
-                C3V1NumericUpDown.Enabled = false;
-            }
-            else if (Compuerta2Label.Text == "NOR")
-            {
-                if (C2V1NumericUpDown.Value == 0 && C2V2NumericUpDown.Value == 0)
-                    C3V1NumericUpDown.Value = 1;
-                else
-                    C3V1NumericUpDown.Value = 0;
-
-                C3V1NumericUpDown.Enabled = false;
-            }
-            else if (Compuerta2Label.Text == "NOT")
-            {
-                if (C2V1NumericUpDown.Value == 0)
-                    C3V1NumericUpDown.Value = 1;
-                else
-                    C3V1NumericUpDown.Value = 0;
-
-                C3V1NumericUpDown.Enabled = false;
-            }
+            Calcular(C2V1NumericUpDown, C2V2NumericUpDown, C3V1NumericUpDown, C2F1ComboBox);
         }
 
         private void Confirmar3button_Click(object sender, EventArgs e)
         {
-            C3V1NumericUpDown.Enabled = false;
-            C3V2NumericUpDown.Enabled = false;
-
-            if (Compuerta3Label.Text == "AND")
-            {
-                if (C3V1NumericUpDown.Value == 1 && C3V2NumericUpDown.Value == 1)
-                    C4V1NumericUpDown.Value = 1;
-                else
-                    C4V1NumericUpDown.Value = 0;
-
-                C4V1NumericUpDown.Enabled = false;
-            }
-            else if (Compuerta3Label.Text == "OR")
-            {
-                if (C3V1NumericUpDown.Value == 0 && C3V2NumericUpDown.Value == 0)
-                    C4V1NumericUpDown.Value = 0;
-                else
-                    C4V1NumericUpDown.Value = 1;
-
-                C4V1NumericUpDown.Enabled = false;
-            }
-            else if (Compuerta3Label.Text == "NAND")
-            {
-                if (C3V1NumericUpDown.Value == 1 && C3V2NumericUpDown.Value == 1)
-                    C4V1NumericUpDown.Value = 0;
-                else
-                    C4V1NumericUpDown.Value = 1;
-
-                C4V1NumericUpDown.Enabled = false;
-            }
-            else if (Compuerta3Label.Text == "XOR")
-            {
-                if (C3V1NumericUpDown.Value == C3V2NumericUpDown.Value)
-                    C4V1NumericUpDown.Value = 0;
-                else
-                    C4V1NumericUpDown.Value = 1;
-
-                C4V1NumericUpDown.Enabled = false;
-            }
-            else if (Compuerta3Label.Text == "NOR")
-            {
-                if (C3V1NumericUpDown.Value == 0 && C3V2NumericUpDown.Value == 0)
-                    C4V1NumericUpDown.Value = 1;
-                else
-                    C4V1NumericUpDown.Value = 0;
-
-                C4V1NumericUpDown.Enabled = false;
-            }
-            else if (Compuerta3Label.Text == "NOT")
-            {
-                if (C3V1NumericUpDown.Value == 0)
-                    C4V1NumericUpDown.Value = 1;
-                else
-                    C4V1NumericUpDown.Value = 0;
-
-                C4V1NumericUpDown.Enabled = false;
-            }
+            Calcular(C3V1NumericUpDown, C3V2NumericUpDown, C4V1NumericUpDown, C3F1ComboBox);
         }
 
         private void LimpiarButton_Click(object sender, EventArgs e)
         {
-            AND.Location = new Point(89, 66);
-            OR.Location = new Point(200, 66);
-            NAND.Location = new Point(308, 66);
-            XOR.Location = new Point(418, 66);
-            NOR.Location = new Point(524, 66);
-            NOT.Location = new Point(632, 66);
+            //Columna 1 Fila 1
+            ANDC1F1.Visible = false;
+            ORC1F1.Visible = false;
+            NANDC1F1.Visible = false;
+            XORC1F1.Visible = false;
+            NORC1F1.Visible = false; 
+            NOTC1F1.Visible = false;
+            C1F1ComboBox.Text = " ";
+
+            //Columna 2 Fila 1
+            ANDC2F1.Visible = false;
+            ORC2F1.Visible = false;
+            NANDC2F1.Visible = false;
+            XORC2F1.Visible = false;
+            NORC2F1.Visible = false;
+            NOTC2F1.Visible = false;
+            C2F1ComboBox.Text = " ";
+
+            //Columna 3 Fila 1
+            ANDC3F1.Visible = false;
+            ORC3F1.Visible = false;
+            NANDC3F1.Visible = false;
+            XORC3F1.Visible = false;
+            NORC3F1.Visible = false;
+            NOTC3F1.Visible = false;
+            C3F1ComboBox.Text = " ";
+
+            //Columna 1 Fila 2
+            ANDC1F2.Visible = false;
+            ORC1F2.Visible = false;
+            NANDC1F2.Visible = false;
+            XORC1F2.Visible = false;
+            NORC1F2.Visible = false;
+            NOTC1F2.Visible = false;
+            C1F2ComboBox.Text = " ";
+
+            //Columna 2 Fila 2
+            ANDC2F2.Visible = false;
+            ORC2F2.Visible = false;
+            NANDC2F2.Visible = false;
+            XORC2F2.Visible = false;
+            NORC2F2.Visible = false;
+            NOTC2F2.Visible = false;
+            C2F2ComboBox.Text = " ";
+
+            //Columna 3 Fila 2
+            ANDC3F2.Visible = false;
+            ORC3F2.Visible = false;
+            NANDC3F2.Visible = false;
+            XORC3F2.Visible = false;
+            NORC3F2.Visible = false;
+            NOTC3F2.Visible = false;
+            C3F2ComboBox.Text = " ";
+
+            //Columna 1 Fila 3
+            ANDC1F3.Visible = false;
+            ORC1F3.Visible = false;
+            NANDC1F3.Visible = false;
+            XORC1F3.Visible = false;
+            NORC1F3.Visible = false;
+            NOTC1F3.Visible = false;
+            C1F3ComboBox.Text = " ";
+
+            //Columna 2 Fila 3
+            ANDC2F3.Visible = false;
+            ORC2F3.Visible = false;
+            NANDC2F3.Visible = false;
+            XORC2F3.Visible = false;
+            NORC2F3.Visible = false;
+            NOTC2F3.Visible = false;
+            C2F3ComboBox.Text = " ";
+
+            //Columna 3 Fila 3
+            ANDC3F3.Visible = false;
+            ORC3F3.Visible = false;
+            NANDC3F3.Visible = false;
+            XORC3F3.Visible = false;
+            NORC3F3.Visible = false;
+            NOTC3F3.Visible = false;
+            C3F3ComboBox.Text = " ";
+
 
             C1V1NumericUpDown.Value = 0;
             C1V2NumericUpDown.Value = 0;
@@ -286,5 +195,72 @@ namespace Simulador_Compuertas_Logicas
             C2V2NumericUpDown.Enabled = true;
             C3V2NumericUpDown.Enabled = true;
         }
+
+        public void DeterminarCompuerta(ComboBox combo, PictureBox AND, PictureBox OR, PictureBox NAND, PictureBox XOR, PictureBox NOR, PictureBox NOT)
+        {
+            if (combo.Text == "AND")
+                AND.Visible = true;
+            else if (combo.Text == "OR")
+                OR.Visible = true;
+            else if (combo.Text == "NAND")
+                NAND.Visible = true;
+            else if (combo.Text == "XOR")
+                XOR.Visible = true;
+            else if (combo.Text == "NOR")
+                NOR.Visible = true;
+            else if (combo.Text == "NOT")
+                NOT.Visible = true;
+        }   
+
+        //Fila 1
+        private void C1F1ComboBox_SelectedIndexChanged(object sender, EventArgs e)//Columna 1
+        {
+            DeterminarCompuerta(C1F1ComboBox, ANDC1F1, ORC1F1, NANDC1F1, XORC1F1, NORC1F1, NOTC1F1);
+        }
+
+        private void C2F1ComboBox_SelectedIndexChanged(object sender, EventArgs e)//Columna 2
+        {
+            DeterminarCompuerta(C2F1ComboBox, ANDC2F1, ORC2F1, NANDC2F1, XORC2F1, NORC2F1, NOTC2F1);
+        }
+
+        private void C3F1ComboBox_SelectedIndexChanged(object sender, EventArgs e)//Columna 3
+        {
+            DeterminarCompuerta(C3F1ComboBox, ANDC3F1, ORC3F1, NANDC3F1, XORC3F1, NORC3F1, NOTC3F1);
+        }
+
+        //Fila 2
+        private void C1F2ComboBox_SelectedIndexChanged(object sender, EventArgs e)//Columna 1
+        {
+            DeterminarCompuerta(C1F2ComboBox, ANDC1F2, ORC1F2, NANDC1F2, XORC1F2, NORC1F2, NOTC1F2);
+        }
+
+        private void C2F2ComboBox_SelectedIndexChanged(object sender, EventArgs e)//Columna 2
+        {
+            DeterminarCompuerta(C2F2ComboBox, ANDC2F2, ORC2F2, NANDC2F2, XORC2F2, NORC2F2, NOTC2F2);
+        }
+
+        private void C3F2ComboBox_SelectedIndexChanged(object sender, EventArgs e)//Columna 3
+        {
+            DeterminarCompuerta(C3F2ComboBox, ANDC3F2, ORC3F2, NANDC3F2, XORC3F2, NORC3F2, NOTC3F2);
+        }
+
+        //Fila 3
+        private void C1F3ComboBox_SelectedIndexChanged(object sender, EventArgs e)//Columna 1
+        {
+            DeterminarCompuerta(C1F3ComboBox, ANDC1F3, ORC1F3, NANDC1F3, XORC1F3, NORC1F3, NOTC1F3);
+        }
+
+        private void C2F3ComboBox_SelectedIndexChanged(object sender, EventArgs e)//Columna 2
+        {
+            DeterminarCompuerta(C2F3ComboBox, ANDC2F3, ORC2F3, NANDC2F3, XORC2F3, NORC2F3, NOTC2F3);
+        }
+
+        private void C3F3ComboBox_SelectedIndexChanged(object sender, EventArgs e)//Columna 3
+        {
+            DeterminarCompuerta(C3F3ComboBox, ANDC3F3, ORC3F3, NANDC3F3, XORC3F3, NORC3F3, NOTC3F3);
+        }
+
+
+        //Cambiar los nombres a los NumericUpDown y a los botones Confirmar
     }
 }
